@@ -1,0 +1,34 @@
+/*This is a style for api are described in old_version.txt file*/
+body {
+    background-color: white;
+}
+
+h1 {
+    color: navy;
+    margin-left: 20px;
+}
+/*
+admin - delete user
+*/
+.delete {
+    color: red;
+}
+/*
+admin - find user by id
+admin - find user by last name
+*/
+.find {
+    color: green;
+}
+/*
+admin - update user by id
+*/
+.update {
+    color: greenyellow;
+}
+/*
+admin - create user
+*/
+.create {
+    color: mediumpurple;
+}
