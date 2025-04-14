@@ -1,0 +1,22 @@
+server.port: 8080
+
+spring:
+  profiles.default: postgres
+  sql.init.mode: always
+  jpa:
+    defer-datasource-initialization: true
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create
+
+spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation: true
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    org.hibernate: INFO
+    com.project.todolistwebapp: INFO
+  file:
+    name: logs/todolist.log
