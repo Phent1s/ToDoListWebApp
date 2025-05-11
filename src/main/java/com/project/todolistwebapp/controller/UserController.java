@@ -73,15 +73,25 @@ public class UserController {
     public String update(@PathVariable long id, Model model,
                          @Validated @ModelAttribute("user") UpdateUserDto updateUserDto, BindingResult result) {
         UserDto oldUser = userService.findByIdThrowing(id);
+        User currentUser = userService.getCurrentUser();
+
+        if (currentUser.getRole() != UserRole.ADMIN) {
+            updateUserDto.setRole(oldUser.getRole());
+        }
 
         if (result.hasErrors()) {
-            updateUserDto.setRole(oldUser.getRole());
             model.addAttribute("roles", UserRole.values());
             return "update-user";
         }
 
-        userService.update(updateUserDto);
-        return "redirect:/users/" + id + "/read";
+        try {
+            userService.update(updateUserDto);
+            return "redirect:/users/" + id + "/read";
+        }catch (IllegalStateException e) {
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("roles", UserRole.values());
+            return "update-user";
+        }
     }
 
     @PreAuthorize("hasRole('ADMIN') " +

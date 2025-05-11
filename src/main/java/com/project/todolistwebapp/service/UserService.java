@@ -37,8 +37,16 @@ public class UserService {
 
     public UserDto update(UpdateUserDto updateUserDto){
         User user = userRepository.findById(updateUserDto.getId()).orElseThrow(EntityNotFoundException::new);
-        if (user.getRole() == UserRole.ADMIN){
+        User currentUser = getCurrentUser();
+
+        if (currentUser.getId() == user.getId() && currentUser.getRole() == UserRole.ADMIN && updateUserDto.getRole() != user.getRole()) {
+            throw new IllegalStateException("Admin cannot change his own role!");
+        }
+
+        if (currentUser.getRole() == UserRole.ADMIN && currentUser.getId() != user.getId()){
             user.setRole(updateUserDto.getRole());
+        } else if (updateUserDto.getRole() != user.getRole()) {
+            throw new IllegalStateException("Only admins can change roles of other users");
         }
         userDtoConverter.fillFields(user, updateUserDto);
         userRepository.save(user);

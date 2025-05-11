@@ -45,18 +45,19 @@
             </div>
         </div>
 
-        <div class="mb-3">
+        <div class="mb-3" th:if="${#authentication.details.role.name == 'ADMIN'}">
             <label for="role" class="form-label">Role</label>
-            <select name="userRole" id="role" th:field="*{role}" class="form-select">
-                        <span th:each="role : ${roles}">
-                            <option th:text="${role.name.substring(0, 1) + role.name.substring(1).toLowerCase()}"
-                                    th:value="${role}"/>
-                        </span>
+            <select name="role" id="role" th:field="*{role}" class="form-select">
+                        <option th:each="role : ${roles}"
+                                th:value="${role}"
+                                th:text="${role.name.substring(0, 1) + role.name.substring(1).toLowerCase()}"
+                                th:selected="${role == user.role}"></option>
             </select>
-            <div class="invalid-feedback d-block">
-                <span th:if="${#fields.hasErrors('role')}" th:errors="*{role}"></span>
+            <div th:if="${error != null}" class="alert alert-danger" role="alert">
+                <span th:text="${error}"></span>
             </div>
         </div>
+        <input type="hidden" th:field="*{role}" th:unless="${#authentication.details.role.name == 'ADMIN'}"/>
         <div>
             <input type="submit" value="Update" class="btn btn-primary"/>
             <input type="reset" value="Clear" class="btn btn-outline-secondary"/>
