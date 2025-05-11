@@ -7,7 +7,6 @@ import com.project.todolistwebapp.model.Task;
 import com.project.todolistwebapp.repository.StateRepository;
 import com.project.todolistwebapp.repository.TaskRepository;
 import com.project.todolistwebapp.repository.ToDoRepository;
-import com.project.todolistwebapp.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +39,7 @@ public class TaskService {
         throw new NullEntityReferenceException("Task cannot be 'null'");
     }
 
-    public Task readById(long id){
+    public Task readById(Long id){
         EntityNotFoundException exception = new EntityNotFoundException("Task with id " + id + " not found");
         log.error(exception.getMessage(), exception);
 
@@ -57,16 +56,16 @@ public class TaskService {
         throw new NullEntityReferenceException("Task cannot be 'null'");
     }
 
-    public void delete(long id){
+    public void delete(Long id){
         Task task = readById(id);
         taskRepository.delete(task);
     }
 
     public List<Task> getAll(){
-        return taskRepository.findAll();
+        return taskRepository.findAllByOrderByIdAsc();
     }
 
-    public List<Task> getByTodoId(long todoId){
-        return taskRepository.getByTodoId(todoId);
+    public List<Task> getByTodoId(Long todoId){
+        return taskRepository.findByTodoIdOrderByIdAsc(todoId);
     }
 }

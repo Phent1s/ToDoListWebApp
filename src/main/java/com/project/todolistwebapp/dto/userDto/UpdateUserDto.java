@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 public class UpdateUserDto {
 
-    private long id;
+    private Long id;
 
     @Pattern(regexp = "^[A-Z][a-z]+(?:[\\s-][A-Z][a-z]+)*$",
             message = "Must start with capital letter, followed by lowercase letters. May contain spaces or hyphens for multiple names.")

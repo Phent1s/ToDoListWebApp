@@ -10,14 +10,14 @@ public class ToDoSecurityService {
 
     private final ToDoService toDoService;
 
-    public boolean isOwner(long toDoId, long userId) {
+    public boolean isOwner(Long toDoId, Long userId) {
         ToDo toDo = toDoService.readById(toDoId);
-        return toDo.getOwner().getId() == userId;
+        return toDo.getOwner().getId().equals(userId);
     }
 
-    public boolean isCollaborator(long toDoId, long userId) {
+    public boolean isCollaborator(Long toDoId, Long userId) {
         ToDo toDo = toDoService.readById(toDoId);
         return toDo.getCollaborators()
-                .stream().anyMatch(c -> c.getId() == userId);
+                .stream().anyMatch(c -> c.getId().equals(userId));
     }
 }

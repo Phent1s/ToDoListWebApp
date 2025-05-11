@@ -51,7 +51,7 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN') " +
                   "or #id == authentication.principal.id")
     @GetMapping("{id}/read")
-    public String read(@PathVariable long id, Model model) {
+    public String read(@PathVariable Long id, Model model) {
         User user = userService.readById(id);
         model.addAttribute("user", user);
         return "user-info";
@@ -60,7 +60,7 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN') " +
                   "or #id == authentication.principal.id")
     @GetMapping("/{id}/update")
-    public String update(@PathVariable long id, Model model) {
+    public String update(@PathVariable Long id, Model model) {
         User user = userService.readById(id);
         model.addAttribute("user", user);
         model.addAttribute("roles", UserRole.values());
@@ -70,7 +70,7 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN') " +
                   "or #id == authentication.principal.id")
     @PostMapping("/{id}/update")
-    public String update(@PathVariable long id, Model model,
+    public String update(@PathVariable Long id, Model model,
                          @Validated @ModelAttribute("user") UpdateUserDto updateUserDto, BindingResult result) {
         UserDto oldUser = userService.findByIdThrowing(id);
         User currentUser = userService.getCurrentUser();
@@ -97,12 +97,12 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN') " +
                   "or #id == authentication.principal.id")
     @GetMapping("/{id}/delete")
-    public String delete(@PathVariable long id) {
+    public String delete(@PathVariable Long id) {
         User currentUser = userService.getCurrentUser();
-        if (currentUser.getId() != id) {
+        if (currentUser.getId().equals(id)) {
             userService.delete(id);
             SecurityContextHolder.clearContext();
-            return "redirect:/login";
+            return "redirect:/logout";
         }
         userService.delete(id);
         return "redirect:/users/all";

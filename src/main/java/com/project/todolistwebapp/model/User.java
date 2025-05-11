@@ -23,8 +23,8 @@ public class User implements UserDetails {
     @Setter
     @Getter
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_id_seq")
+    private Long id;
 
     @Pattern(regexp = "^[A-Z][a-z]+(?:[\\s-][A-Z][a-z]+)*$",
             message = "Must start with capital letter, followed by lowercase letters. May contain spaces or hyphens for multiple names.")

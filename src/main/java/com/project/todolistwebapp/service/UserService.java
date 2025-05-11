@@ -30,7 +30,7 @@ public class UserService {
         throw new NullEntityReferenceException("User cannot be 'null'");
     }
 
-    public User readById(long id){
+    public User readById(Long id){
         return userRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("User with id " + id + " not found"));
     }
@@ -39,11 +39,11 @@ public class UserService {
         User user = userRepository.findById(updateUserDto.getId()).orElseThrow(EntityNotFoundException::new);
         User currentUser = getCurrentUser();
 
-        if (currentUser.getId() == user.getId() && currentUser.getRole() == UserRole.ADMIN && updateUserDto.getRole() != user.getRole()) {
+        if (currentUser.getId().equals(user.getId()) && currentUser.getRole() == UserRole.ADMIN && updateUserDto.getRole() != user.getRole()) {
             throw new IllegalStateException("Admin cannot change his own role!");
         }
 
-        if (currentUser.getRole() == UserRole.ADMIN && currentUser.getId() != user.getId()){
+        if (currentUser.getRole() == UserRole.ADMIN && !currentUser.getId().equals(user.getId())){
             user.setRole(updateUserDto.getRole());
         } else if (updateUserDto.getRole() != user.getRole()) {
             throw new IllegalStateException("Only admins can change roles of other users");
@@ -53,13 +53,13 @@ public class UserService {
         return userDtoConverter.toDto(user);
     }
 
-    public void delete(long id){
+    public void delete(Long id){
         User user = readById(id);
         userRepository.delete(user);
     }
 
     public List<User> getAll(){
-        return userRepository.findAll();
+        return userRepository.findAllByOrderByIdAsc();
     }
 
     public Optional<User> findByUsername(String username){
@@ -72,15 +72,15 @@ public class UserService {
         return (User) authentication.getDetails();
     }
 
-    public Optional<UserDto> findById(long id){
+    public Optional<UserDto> findById(Long id){
         return userRepository.findById(id).map(userDtoConverter::toDto);
     }
 
-    public UserDto findByIdThrowing(long id){
+    public UserDto findByIdThrowing(Long id){
         return userRepository.findById(id).map(userDtoConverter::toDto).orElseThrow(EntityNotFoundException::new);
     }
 
     public List<UserDto> findAll(){
-        return userRepository.findAll().stream().map(userDtoConverter::toDto).toList();
+        return userRepository.findAllByOrderByIdAsc().stream().map(userDtoConverter::toDto).toList();
     }
 }

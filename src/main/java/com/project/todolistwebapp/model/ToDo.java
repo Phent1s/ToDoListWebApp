@@ -2,6 +2,9 @@ package com.project.todolistwebapp.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -9,20 +12,24 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "todos")
+@Getter
+@Setter
 public class ToDo {
+    @ToString.Include
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @Column(nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "todos_id_seq")
+    private Long id;
 
     @NotBlank(message = "The 'title' cannot be empty")
     @Column(name = "title", nullable = false, unique = true)
     private String title;
 
+    @ToString.Include
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "owner_id")
     private User owner;
 
     @OneToMany(mappedBy = "todo", cascade = CascadeType.REMOVE)
@@ -36,52 +43,12 @@ public class ToDo {
 
     public ToDo() {}
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public @NotBlank(message = "The 'title' cannot be empty") String getTitle() {
         return title;
     }
 
     public void setTitle(@NotBlank(message = "The 'title' cannot be empty") String title) {
         this.title = title;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public User getOwner() {
-        return owner;
-    }
-
-    public void setOwner(User owner) {
-        this.owner = owner;
-    }
-
-    public List<Task> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
-    }
-
-    public List<User> getCollaborators() {
-        return collaborators;
-    }
-
-    public void setCollaborators(List<User> collaborators) {
-        this.collaborators = collaborators;
     }
 
     @Override

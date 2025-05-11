@@ -12,8 +12,8 @@ import java.util.Objects;
 @Setter
 public class Task {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tasks_id_seq")
+    private Long id;
 
     @Column(name = "name", nullable = false)
     private String name;

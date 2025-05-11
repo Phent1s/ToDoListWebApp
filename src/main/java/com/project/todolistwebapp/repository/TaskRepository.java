@@ -10,5 +10,9 @@ import java.util.List;
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
     @Query(value = "select * from tasks where todo_id = ?1", nativeQuery = true)
-    List<Task> getByTodoId(long todoId);
+    List<Task> getByTodoId(Long todoId);
+
+    List<Task> findAllByOrderByIdAsc();
+
+    List<Task> findByTodoIdOrderByIdAsc(Long todoId);
 }

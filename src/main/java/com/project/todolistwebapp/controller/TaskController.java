@@ -31,7 +31,7 @@ public class TaskController {
                   "and (@toDoSecurityService.isOwner(#todoId, authentication.principal.id) " +
                   "or @toDoSecurityService.isCollaborator(#todoId, authentication.principal.id))")
     @GetMapping("/create/todos/{todo_id}")
-    public String create(@PathVariable("todo_id") long todoId, Model model) {
+    public String create(@PathVariable("todo_id") Long todoId, Model model) {
         model.addAttribute("task", new TaskDto());
         model.addAttribute("todo", toDoService.readById(todoId));
         model.addAttribute("priorities", TaskPriority.values());
@@ -42,7 +42,7 @@ public class TaskController {
                   "and (@toDoSecurityService.isOwner(#todoId, authentication.principal.id))" +
                   "or @toDoSecurityService.isCollaborator(#todoId, authentication.principal.id)")
     @PostMapping("/create/todos/{todo_id}")
-    public String create(@PathVariable("todo_id") long todoId, Model model,
+    public String create(@PathVariable("todo_id") Long todoId, Model model,
                          @Validated @ModelAttribute("task") TaskDto taskDto, BindingResult result){
         if (result.hasErrors()) {
             model.addAttribute("todo", toDoService.readById(todoId));
@@ -60,7 +60,7 @@ public class TaskController {
                   "and (@toDoSecurityService.isOwner(#todoId, authentication.principal.id))" +
                   "or @toDoSecurityService.isCollaborator(#todoId, authentication.principal.id)")
     @GetMapping("/{task_id}/update/todos/{todo_id}")
-    public String taskUpdateForm(@PathVariable("task_id") long taskId, @PathVariable("todo_id") long todoId, Model model) {
+    public String taskUpdateForm(@PathVariable("task_id") Long taskId, @PathVariable("todo_id") Long todoId, Model model) {
         TaskDto taskDto = taskTransformer.convertToDto(taskService.readById(taskId));
         model.addAttribute("task", taskDto);
         model.addAttribute("priorities", TaskPriority.values());
@@ -72,7 +72,7 @@ public class TaskController {
                   "and (@toDoSecurityService.isOwner(#todoId, authentication.principal.id))" +
                   "or @toDoSecurityService.isCollaborator(#todoId, authentication.principal.id)")
     @PostMapping("/{task_id}/update/todos/{todo_id}")
-    public String update(@PathVariable("todo_id") long todoId, @PathVariable("task_id") long taskId, Model model,
+    public String update(@PathVariable("todo_id") Long todoId, @PathVariable("task_id") Long taskId, Model model,
                          @Validated @ModelAttribute("task") TaskDto taskDto, BindingResult result) {
         if (result.hasErrors()) {
             model.addAttribute("priorities", TaskPriority.values());
@@ -94,7 +94,7 @@ public class TaskController {
                   "and (@toDoSecurityService.isOwner(#todoId, authentication.principal.id))" +
                   "or @toDoSecurityService.isCollaborator(#todoId, authentication.principal.id)")
     @GetMapping("/{task_id}/delete/todos/{todo_id}")
-    public String delete(@PathVariable("task_id") long taskId, @PathVariable("todo_id") long todoId){
+    public String delete(@PathVariable("task_id") Long taskId, @PathVariable("todo_id") Long todoId){
         taskService.delete(taskId);
         log.info("Task with id = {} was deleted successfully", taskId);
         return "redirect:/todos/" + todoId + "/read";

@@ -24,7 +24,7 @@ public class ToDoService {
         throw new NullEntityReferenceException("ToDo cannot be 'null'");
     }
 
-    public ToDo readById(long id){
+    public ToDo readById(Long id){
         return toDoRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("ToDo with id " + id + " not found")
         );
@@ -38,12 +38,12 @@ public class ToDoService {
         throw new NullEntityReferenceException("ToDo cannot be 'null'");
     }
 
-    public void delete(long id){
+    public void delete(Long id){
         ToDo todo = readById(id);
         toDoRepository.delete(todo);
     }
 
     public List<ToDo> gteAll(){ return toDoRepository.findAll(); }
 
-    public List<ToDo> getByUserId(long userId){return toDoRepository.getByUserId(userId);}
+    public List<ToDo> getByUserId(Long userId){return toDoRepository.findByUserWithCollaborationSorted(userId);}
 }
