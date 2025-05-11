@@ -3,6 +3,7 @@ package com.project.todolistwebapp.controller;
 import com.project.todolistwebapp.dto.userDto.CreateUserDto;
 import com.project.todolistwebapp.dto.userDto.UpdateUserDto;
 import com.project.todolistwebapp.dto.userDto.UserDto;
+import com.project.todolistwebapp.dto.userDto.UserDtoConverter;
 import com.project.todolistwebapp.model.User;
 import com.project.todolistwebapp.model.UserRole;
 import com.project.todolistwebapp.service.UserService;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
+    private final UserDtoConverter userDtoConverter;
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/create")
@@ -33,14 +34,18 @@ public class UserController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
-    public String create(@Validated @ModelAttribute("user") User user, BindingResult result) {
+    public String create(@Validated @ModelAttribute("user") CreateUserDto userDto, BindingResult result) {
         if (result.hasErrors()) {
             return "create-user";
         }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole(UserRole.USER);
-        User newUser = userService.create(user);
-        return "redirect:/todos/all/users/" + newUser.getId();
+        try {
+            User user = userDtoConverter.convertToEntity(userDto);
+            userService.create(user);
+            return "redirect:/login";
+        } catch (IllegalArgumentException e) {
+            result.rejectValue("password", "error.user", "Password encoding error");
+            return "create-user";
+        }
     }
 
     @PreAuthorize("hasRole('ADMIN') " +

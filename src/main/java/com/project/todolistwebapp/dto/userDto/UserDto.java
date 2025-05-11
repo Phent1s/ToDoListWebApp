@@ -3,6 +3,7 @@ package com.project.todolistwebapp.dto.userDto;
 import com.project.todolistwebapp.model.UserRole;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,15 +17,15 @@ import lombok.NoArgsConstructor;
 public class UserDto {
     private long id;
 
-    @Pattern(regexp = "[A-Z][a-z]+",
-            message = "Must start with a capital letter followed by one or more lowercase letters")
+    @Pattern(regexp = "^[A-Z][a-z]+(?:[\\s-][A-Z][a-z]+)*$",
+            message = "Must start with capital letter, followed by lowercase letters. May contain spaces or hyphens for multiple names.")
     private String firstName;
 
-    @Pattern(regexp = "[A-Z][a-z]+",
-            message = "Must start with a capital letter followed by one or more lowercase letters")
+    @Pattern(regexp = "^[A-Z][a-z]+(?:[\\s-][A-Z][a-z]+)*$",
+            message = "Must start with capital letter, followed by lowercase letters. May contain spaces or hyphens for multiple names.")
     private String lastName;
 
-    @Pattern(regexp = "[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}", message = "Must be a valid e-mail address")
+    @Email
     private String email;
 
     @Enumerated(EnumType.STRING)

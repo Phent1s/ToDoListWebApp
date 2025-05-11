@@ -3,9 +3,11 @@ package com.project.todolistwebapp.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.User.UserBuilder;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -15,77 +17,80 @@ import java.util.Objects;
 
 @Entity
 @Table(name ="users")
+@NoArgsConstructor
 public class User implements UserDetails {
 
+    @Setter
+    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Pattern(regexp = "[A-Z][a-z]+",
-    message = "Must start with a capital letter followed by one or more lowercase letters")
+    @Pattern(regexp = "^[A-Z][a-z]+(?:[\\s-][A-Z][a-z]+)*$",
+            message = "Must start with capital letter, followed by lowercase letters. May contain spaces or hyphens for multiple names.")
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Pattern(regexp = "[A-Z][a-z]+",
-            message = "Must start with a capital letter followed by one or more lowercase letters")
+    @Pattern(regexp = "^[A-Z][a-z]+(?:[\\s-][A-Z][a-z]+)*$",
+            message = "Must start with capital letter, followed by lowercase letters. May contain spaces or hyphens for multiple names.")
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-//    @Email
-    @Pattern(regexp = "[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}",
-    message = "Must be a valid e-mail address")
+    @Email
+//    @Pattern(regexp = "[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}",
+//    message = "Must be a valid e-mail address")
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
 //    @Pattern(regexp = "(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,}",
 //            message = "Must be minimum 6 characters, at least one letter and one number")
+    @Setter(AccessLevel.PRIVATE)
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Setter
+    @Getter
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
+    @Getter
+    @Setter
     @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
     private List<ToDo> myTodos;
 
+    @Getter
+    @Setter
     @ManyToMany
     @JoinTable(name = "todo_collaborator",
             joinColumns = @JoinColumn(name = "collaborator_id"),
             inverseJoinColumns = @JoinColumn(name = "todo_id"))
     private List<ToDo> otherTodos;
 
-    public User() {}
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public @Pattern(regexp = "[A-Z][a-z]+",
-            message = "Must start with a capital letter followed by one or more lowercase letters") String getFirstName() {
+    public @Pattern(regexp = "^[A-Z][a-z]+(?:[\\s-][A-Z][a-z]+)*$",
+            message = "Must start with capital letter, followed by lowercase letters. May contain spaces or hyphens for multiple names.")
+    String getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(@Pattern(regexp = "[A-Z][a-z]+",
-            message = "Must start with a capital letter followed by one or more lowercase letters") String firstName) {
+    public void setFirstName(@Pattern(regexp = "^[A-Z][a-z]+(?:[\\s-][A-Z][a-z]+)*$",
+            message = "Must start with capital letter, followed by lowercase letters. May contain spaces or hyphens for multiple names.") String firstName) {
         this.firstName = firstName;
     }
 
-    public @Pattern(regexp = "[A-Z][a-z]+",
-            message = "Must start with a capital letter followed by one or more lowercase letters") String getLastName() {
+    public @Pattern(regexp = "^[A-Z][a-z]+(?:[\\s-][A-Z][a-z]+)*$",
+            message = "Must start with capital letter, followed by lowercase letters. May contain spaces or hyphens for multiple names.")
+    String getLastName() {
         return lastName;
     }
 
-    public void setLastName(@Pattern(regexp = "[A-Z][a-z]+",
-            message = "Must start with a capital letter followed by one or more lowercase letters") String lastName) {
+    public void setLastName(@Pattern(regexp = "^[A-Z][a-z]+(?:[\\s-][A-Z][a-z]+)*$",
+            message = "Must start with capital letter, followed by lowercase letters. May contain spaces or hyphens for multiple names.") String lastName) {
         this.lastName = lastName;
     }
 
     public @Pattern(regexp = "[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}",
-            message = "Must be a valid e-mail address") String getEmail() {
+            message = "Must be a valid e-mail address")
+    String getEmail() {
         return email;
     }
 
@@ -94,37 +99,35 @@ public class User implements UserDetails {
         this.email = email;
     }
 
+    @Builder(builderMethodName = "secureBuilder")
+    private User(String firstName, String lastName, String email, String encodedPassword) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = encodedPassword;
+        this.role = UserRole.USER;
+    }
+
+    public static User createWithEncodedPassword(
+            String firstName,
+            String lastName,
+            String email,
+            String encodedPassword) {
+        if (!encodedPassword.startsWith("$2a$")){
+            throw new IllegalArgumentException("Password must be already encoded");
+        }
+
+        return User.secureBuilder()
+                .firstName(firstName)
+                .lastName(lastName)
+                .email(email)
+                .encodedPassword(encodedPassword)
+                .build();
+    }
+
     @Override
     public String getPassword() {
         return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public UserRole getRole() {
-        return role;
-    }
-
-    public void setRole(UserRole role) {
-        this.role = role;
-    }
-
-    public List<ToDo> getMyTodos() {
-        return myTodos;
-    }
-
-    public void setMyTodos(List<ToDo> myTodos) {
-        this.myTodos = myTodos;
-    }
-
-    public List<ToDo> getOtherTodos() {
-        return otherTodos;
-    }
-
-    public void setOtherTodos(List<ToDo> otherTodos) {
-        this.otherTodos = otherTodos;
     }
 
     @Override
