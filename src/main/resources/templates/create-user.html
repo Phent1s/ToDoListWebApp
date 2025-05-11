@@ -17,10 +17,11 @@
                     <label for="first-name">First name:</label>
                 </td>
                 <td>
-                    <input type="text" th:field="*{firstName}" id="first-name" />
+                    <input type="text" th:field="*{firstName}" id="first-name" required minlength="2" />
                 </td>
                 <td>
-                    <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></span>
+                    <span th:if="${#fields.hasErrors('firstName')}"
+                          th:errors="*{firstName}"></span>
                 </td>
             </tr>
             <tr>
@@ -28,10 +29,11 @@
                     <label for="last-name">Last name:</label>
                 </td>
                 <td>
-                    <input type="text" th:field="*{lastName}" id="last-name" />
+                    <input type="text" th:field="*{lastName}" id="last-name" required minlength="2"/>
                 </td>
                 <td>
-                    <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></span>
+                    <span th:if="${#fields.hasErrors('lastName')}"
+                          th:errors="*{lastName}"></span>
                 </td>
             </tr>
             <tr>
@@ -39,10 +41,11 @@
                     <label for="email">E-mail:</label>
                 </td>
                 <td>
-                    <input type="text" th:field="*{email}" id="email" />
+                    <input type="text" th:field="*{email}" id="email" required minlength="2"/>
                 </td>
                 <td>
-                    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+                    <span th:if="${#fields.hasErrors('email')}"
+                          th:errors="*{email}"></span>
                 </td>
             </tr>
             <tr>
@@ -50,10 +53,11 @@
                     <label for="password">Password:</label>
                 </td>
                 <td>
-                    <input type="password" th:field="*{password}" id="password" />
+                    <input type="password" th:field="*{password}" id="password" required minlength="2"/>
                 </td>
                 <td>
-                    <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+                    <span th:if="${#fields.hasErrors('password')}"
+                          th:errors="*{password}"></span>
                 </td>
             </tr>
             <tr>
