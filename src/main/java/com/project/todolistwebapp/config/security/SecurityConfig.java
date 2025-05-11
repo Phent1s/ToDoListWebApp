@@ -28,13 +28,13 @@ public class SecurityConfig {
                         .deleteCookies("JSESSIONID"))
                 .httpBasic(withDefaults())
                 .exceptionHandling(customizer -> customizer
-                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.FORBIDDEN))
+                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                         .accessDeniedPage("/access-denied"))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/img/**", "/", "/home", "/login",
-                                "/access-denied").permitAll()
+                                "/access-denied", "/create-user", "/create-user/**", "users/create", "users/").permitAll()
                         .requestMatchers("/users/**").hasAnyAuthority("ADMIN", "USER")
-                        .requestMatchers("/**").hasAuthority("ADMIN")
+                        .requestMatchers("/admin/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated());
         return http.build();
     }
