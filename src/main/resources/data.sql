@@ -1,29 +1,29 @@
 
-INSERT INTO users (id, first_name, last_name, email, password, role) VALUES (5, 'Nick', 'Green', 'nick@mail.com', '{noop}2222', 'USER');
-INSERT INTO users (id, first_name, last_name, email, password, role) VALUES (6, 'Nora', 'White', 'nora@mail.com', '{noop}3333', 'USER');
-INSERT INTO users (id, first_name, last_name, email, password, role) VALUES (4, 'Mike', 'Brown', 'mike@mail.com', '{noop}1111', 'ADMIN');
+INSERT INTO users (id, first_name, last_name, email, password, role) VALUES (2, 'Harley', 'Almond', 'harley@mail.com', '$2a$12$hBxKD42i90mKap1S3oa.D.eLE3RNWwW5ieXrEV3C8X22ANCmGBJte', 'USER');
+INSERT INTO users (id, first_name, last_name, email, password, role) VALUES (3, 'Bill', 'Black', 'bill@mail.com', '$2a$12$M8ejDjJliggKWUodFncD9.sZyMrhC7PpsmaYXb5i7iPamZ6/eytGa', 'USER');
+INSERT INTO users (id, first_name, last_name, email, password, role) VALUES (1, 'Alex', 'Fisher', 'alex@mail.com', '$2a$12$n7JxG2mB4x2QFv5oDu.X1.T8dUxqCHmIyZ6vsRgyS/eFvjlT44VwS', 'ADMIN');
 
 
-INSERT INTO states (id, name) VALUES (5, 'New');
-INSERT INTO states (id, name) VALUES (6, 'Doing');
-INSERT INTO states (id, name) VALUES (7, 'Verify');
-INSERT INTO states (id, name) VALUES (8, 'Done');
+INSERT INTO states (id, name) VALUES (1, 'New');
+INSERT INTO states (id, name) VALUES (2, 'Doing');
+INSERT INTO states (id, name) VALUES (3, 'Verify');
+INSERT INTO states (id, name) VALUES (4, 'Done');
 
-INSERT INTO todos (id, title, created_at, owner_id) VALUES (7, 'Mike''s To-Do #1', '2020-09-16 14:00:04.810221', 4);
-INSERT INTO todos (id, title, created_at, owner_id) VALUES (8, 'Mike''s To-Do #2', '2020-09-16 14:00:11.480271', 4);
-INSERT INTO todos (id, title, created_at, owner_id) VALUES (9, 'Mike''s To-Do #3', '2020-09-16 14:00:16.351238', 4);
-INSERT INTO todos (id, title, created_at, owner_id) VALUES (10, 'Nick''s To-Do #1', '2020-09-16 14:14:54.532337', 5);
-INSERT INTO todos (id, title, created_at, owner_id) VALUES (11, 'Nick''s To-Do #2', '2020-09-16 14:15:04.707176', 5);
-INSERT INTO todos (id, title, created_at, owner_id) VALUES (12, 'Nora''s To-Do #1', '2020-09-16 14:15:32.464391', 6);
-INSERT INTO todos (id, title, created_at, owner_id) VALUES (13, 'Nora''s To-Do #2', '2020-09-16 14:15:39.16246', 6);
+INSERT INTO todos (id, title, created_at, owner_id) VALUES (1, 'Alex''s To-Do #1', '2024-10-06 15:00:04.114253', 1);
+INSERT INTO todos (id, title, created_at, owner_id) VALUES (2, 'Alex''s To-Do #2', '2024-10-06 15:00:11.585311', 1);
+INSERT INTO todos (id, title, created_at, owner_id) VALUES (3, 'Alex''s To-Do #3', '2024-10-06 15:00:16.952515', 1);
+INSERT INTO todos (id, title, created_at, owner_id) VALUES (4, 'Harley''s To-Do #1', '2024-10-06 15:14:54.532337', 2);
+INSERT INTO todos (id, title, created_at, owner_id) VALUES (5, 'Harley''s To-Do #2', '2024-10-06 15:15:04.707176', 2);
+INSERT INTO todos (id, title, created_at, owner_id) VALUES (6, 'Bill''s To-Do #1', '2024-10-06 15:15:32.464391', 3);
+INSERT INTO todos (id, title, created_at, owner_id) VALUES (7, 'Bill''s To-Do #2', '2024-10-06 15:15:39.16246', 3);
 
-INSERT INTO tasks (id, name, priority, todo_id, state_id) VALUES (6, 'Task #2', 'LOW', 7, 5);
-INSERT INTO tasks (id, name, priority, todo_id, state_id) VALUES (5, 'Task #1', 'HIGH', 7, 8);
-INSERT INTO tasks (id, name, priority, todo_id, state_id) VALUES (7, 'Task #3', 'MEDIUM', 7, 6);
+INSERT INTO tasks (id, name, priority, todo_id, state_id) VALUES (2, 'Task #2', 'LOW', 1, 1);
+INSERT INTO tasks (id, name, priority, todo_id, state_id) VALUES (1, 'Task #1', 'HIGH', 1, 4);
+INSERT INTO tasks (id, name, priority, todo_id, state_id) VALUES (3, 'Task #3', 'MEDIUM', 1, 2);
 
-INSERT INTO todo_collaborator (todo_id, collaborator_id) VALUES (7, 5);
-INSERT INTO todo_collaborator (todo_id, collaborator_id) VALUES (7, 6);
-INSERT INTO todo_collaborator (todo_id, collaborator_id) VALUES (10, 6);
-INSERT INTO todo_collaborator (todo_id, collaborator_id) VALUES (10, 4);
-INSERT INTO todo_collaborator (todo_id, collaborator_id) VALUES (12, 5);
-INSERT INTO todo_collaborator (todo_id, collaborator_id) VALUES (12, 4);
+INSERT INTO todo_collaborator (todo_id, collaborator_id) VALUES (1, 2);
+INSERT INTO todo_collaborator (todo_id, collaborator_id) VALUES (1, 3);
+INSERT INTO todo_collaborator (todo_id, collaborator_id) VALUES (4, 3);
+INSERT INTO todo_collaborator (todo_id, collaborator_id) VALUES (4, 1);
+INSERT INTO todo_collaborator (todo_id, collaborator_id) VALUES (5, 2);
+INSERT INTO todo_collaborator (todo_id, collaborator_id) VALUES (5, 1);
