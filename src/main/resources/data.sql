@@ -9,10 +9,11 @@ INSERT INTO states (id, name) VALUES (2, 'Doing');
 INSERT INTO states (id, name) VALUES (3, 'Verify');
 INSERT INTO states (id, name) VALUES (4, 'Done');
 
+
 INSERT INTO todos (id, title, created_at, owner_id) VALUES (1, 'Alex''s To-Do #1', '2024-10-06 15:00:04.114253', 1);
 INSERT INTO todos (id, title, created_at, owner_id) VALUES (2, 'Alex''s To-Do #2', '2024-10-06 15:00:11.585311', 1);
-INSERT INTO todos (id, title, created_at, owner_id) VALUES (3, 'Alex''s To-Do #3', '2024-10-06 15:00:16.952515', 1);
-INSERT INTO todos (id, title, created_at, owner_id) VALUES (4, 'Bill''s To-Do #1', '2024-10-06 15:14:54.532337', 2);
+INSERT INTO todos (id, title, created_at, owner_id) VALUES (3, 'Alex''s To-Do #3', '2024-10-06 15:05:16.952515', 1);
+INSERT INTO todos (id, title, created_at, owner_id) VALUES (4, 'Bill''s To-Do #1', '2024-10-06 15:03:54.532337', 2);
 INSERT INTO todos (id, title, created_at, owner_id) VALUES (5, 'Bill''s To-Do #2', '2024-10-06 15:15:04.707176', 2);
 INSERT INTO todos (id, title, created_at, owner_id) VALUES (6, 'Harley''s To-Do #1', '2024-10-06 15:15:32.464391', 3);
 INSERT INTO todos (id, title, created_at, owner_id) VALUES (7, 'Harley''s To-Do #2', '2024-10-06 15:15:39.16246', 3);
@@ -27,3 +28,8 @@ INSERT INTO todo_collaborator (todo_id, collaborator_id) VALUES (4, 3);
 INSERT INTO todo_collaborator (todo_id, collaborator_id) VALUES (4, 1);
 INSERT INTO todo_collaborator (todo_id, collaborator_id) VALUES (5, 2);
 INSERT INTO todo_collaborator (todo_id, collaborator_id) VALUES (5, 1);
+
+SELECT setval('state_id_seq', (SELECT MAX(id) FROM states));
+SELECT setval('users_id_seq', (SELECT MAX(id) FROM users));
+SELECT setval('tasks_id_seq', (SELECT MAX(id) FROM tasks));
+SELECT setval('todos_id_seq', (SELECT MAX(id) FROM todos));
