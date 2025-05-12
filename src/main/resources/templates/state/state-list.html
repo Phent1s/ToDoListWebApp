@@ -5,28 +5,34 @@
       lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Tasks of To-Do List</title>
+    <title>States List</title>
 </head>
 <body>
 <div layout:fragment="content" style="margin: 0 auto; width: max-content">
 
-    <h1>Manage States</h1>
-
-    <a class="btn btn-primary" href="/states/add">Add State</a>
-
+    <h1>States List</h1>
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+    <form th:action="@{/states/create}" method="get">
+        <input type="submit" class="btn btn-primary" value="Create new State">
+    </form>
+    <br>
     <table class="table">
         <thead>
         <tr>
+            <th>No.</th>
             <th>Name</th>
-            <th>Actions</th>
+            <th colspan="2">Actions</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="state: ${states}">
-            <td th:text="${state.name}"></td>
+        <tr th:each="state, iStat: ${states}">
+            <td th:text="${iStat.index + 1}"/>
+            <td th:text="${state.name}"/>
             <td>
-                <a th:href="|/states/${state.id}/remove|" />
-                delete, rename
+                <a th:href="@{|/states/${state.id}/rename|}">Rename</a>
+            </td>
+            <td>
+                <a th:href="@{|/states/${state.id}/delete|}">Delete</a>
             </td>
         </tr>
         </tbody>

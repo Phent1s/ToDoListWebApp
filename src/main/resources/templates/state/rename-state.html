@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/template}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update State</title>
+</head>
+<body>
+<div layout:fragment="content" style="margin: 0 auto; width: max-content">
+    <h2>Update State</h2>
+    <form th:object="${state}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+        <div class="mb-3">
+            <label for="id" class="form-label">Id</label>
+            <input type="text" class="form-control" th:field="*{id}" id="id" th:value="*{id}" disabled/>
+        </div>
+
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" th:field="*{name}" id="name" th:value="*{name}"/>
+            <div class="invalid-feedback d-block">
+                <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+            </div>
+        </div>
+        <div>
+            <input type="submit" value="Update" class="btn btn-primary"/>
+            <input type="reset" value="Clear" class="btn btn-outline-secondary"/>
+        </div>
+
+
+    </form>
+</div>
+</body>
+</html>

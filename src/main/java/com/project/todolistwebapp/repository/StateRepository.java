@@ -9,5 +9,5 @@ import java.util.List;
 public interface StateRepository extends JpaRepository<State, Long> {
     State findByName(String name);
 
-    List<State> findAllByOrderById();
+    List<State> findAllByOrderByIdAsc();
 }

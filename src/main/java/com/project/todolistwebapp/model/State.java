@@ -16,9 +16,9 @@ import java.util.List;
 public class State {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "state_id_seq")
     @EqualsAndHashCode.Include
-    private long id;
+    private Long id;
 
     @NotBlank(message = "The 'name' cannot be empty")
     @Column(name = "name", nullable = false, unique = true)

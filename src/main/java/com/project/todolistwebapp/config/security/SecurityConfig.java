@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -32,10 +33,11 @@ public class SecurityConfig {
                         .accessDeniedPage("/access-denied"))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/img/**", "/", "/home", "/login",
-                                "/access-denied", "/create-user", "/create-user/**", "users/create", "users/").permitAll()
+                                "/access-denied", "/create-user", "/create-user/**", "users/create", "users/", "states/", "states/create").permitAll()
                         .requestMatchers("/users/**").hasAnyAuthority("ADMIN", "USER")
-                        .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                        .requestMatchers("/admin/**", "/states/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated());
         return http.build();
     }
+
 }
