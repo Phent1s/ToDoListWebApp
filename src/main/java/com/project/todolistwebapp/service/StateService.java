@@ -24,7 +24,7 @@ public class StateService {
         throw new NullEntityReferenceException("State cannot be null");
     }
 
-    public State readById(long id) {
+    public State readById(Long id) {
         return stateRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("State with id " + id + " not found")
         );
@@ -38,13 +38,13 @@ public class StateService {
         throw new NullEntityReferenceException("State cannot be null");
     }
 
-    public void delete(long id) {
+    public void delete(Long id) {
         State state = readById(id);
         stateRepository.delete(state);
     }
 
     public List<State> getAll() {
-        return stateRepository.findAll();
+        return stateRepository.findAllByOrderByIdAsc();
     }
 
     public State getByName(String name) {
@@ -55,10 +55,9 @@ public class StateService {
         throw new EntityNotFoundException("State with name " + name + " not found");
     }
 
-    public List<StateDto> findAll() {
-        return stateRepository.findAll()
+    public List<State> findAll() {
+        return stateRepository.findAllByOrderByIdAsc()
                 .stream()
-                .map(this::toDto)
                 .toList();
     }
 
