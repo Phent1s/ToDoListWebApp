@@ -1,99 +1,127 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/template}"
       lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Read existing To-Do</title>
+    <title th:text="${todo.title + ' - Tasks'}">To-Do Details</title>
+    <link rel="stylesheet" href="/img/css/draft_style.css">
 </head>
 <body>
-<div layout:fragment="content" style="margin: 0 auto; width: max-content">
-    <h2 th:text="${'All Tasks from ' + todo.title}"></h2>
-
-    <a th:href="@{|/tasks/create/todos/${todo.id}|}" class="btn btn-outline-primary">
-        Create New Task
-    </a>
-    <br>
-    <br>
-
-    <p th:if="${tasks.isEmpty()}">No tasks yet</p>
-
-    <table class="table" th:unless="${tasks.isEmpty()}">
-        <tr>
-            <th>No.</th>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Priority</th>
-            <th>State</th>
-            <th colspan="2">Operations</th>
-        </tr>
-        <tr th:each="task, iStat: ${tasks}">
-            <td th:text="${iStat.index + 1}"/>
-            <td th:text="${task.id}"/>
-            <td th:text="${task.name}"/>
-            <td th:text="${task.priority.name().substring(0, 1) + task.priority.name().substring(1).toLowerCase()}"/>
-            <td th:text="${task.state.name}"/>
-            <td>
-                <a th:href="@{|/tasks/${task.id}/update/todos/${todo.id}|}">Edit</a>
-            </td>
-            <td>
-                <a th:href="@{|/tasks/${task.id}/delete/todos/${todo.id}|}">Remove</a>
-            </td>
-        </tr>
-    </table>
-    <br>
-    <p><b>Collaborators</b></p>
-
-    <p th:if="${todo.collaborators.isEmpty()}">Currently there are no collaborators</p>
-
-    <table class="table" th:unless="${todo.collaborators.isEmpty()}">
-
-        <thead>
-        <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Operations</th>
-        </tr>
-        </thead>
-        <tr th:each="collaborator, iStat: ${todo.collaborators}">
-            <td th:text="${iStat.index + 1}"/>
-            <td>
-                <a th:href="@{|/users/${collaborator.id}/read|}"
-                   th:text="${collaborator.firstName + ' ' + collaborator.lastName}"/>
-            </td>
-            <td th:if="${#authorization.expression('hasAuthority(''ADMIN'')')
-                                    or #authorization.expression('hasAuthority(''USER'')') and #authentication.details.id == todo.owner.id}">
-                <a th:href="@{/todos/{id}/remove(id = ${todo.id}, user_id = ${collaborator.id})}">Remove</a>
-            </td>
-        </tr>
-    </table>
-
-    <div th:if="${#authorization.expression('hasAuthority(''ADMIN'')')
-                    or #authorization.expression('hasAuthority(''USER'')') and #authentication.details.id == todo.owner.id}">
-
-        <label for="users">Add new collaborator</label>
-
-        <form th:action="@{/todos/{id}/add(id = ${todo.id})}" method="get" class="row">
-            <div class="col">
-                <select name="user_id" id="users" class="form-select">
-                    <option>Select collaborator...</option>
-                    <option th:each="user : ${users}" th:value="${user.id}"
-                            th:text="${user.firstName + ' ' + user.lastName}"/>
-                </select>
+<div layout:fragment="content">
+    <div class="todo-detail-container">
+        <div class="todo-detail-header">
+            <h2 class="todo-detail-title">
+                <i class="bi bi-card-checklist"></i>
+                <span th:text="${todo.title}"></span>
+            </h2>
+            <div class="todo-meta">
+                <span class="created-at">
+                    <i class="bi bi-calendar"></i>
+                    <span th:text="${#temporals.format(todo.createdAt, 'dd.MM.yyyy HH:mm')}"></span>
+                </span>
+                <span class="owner">
+                    <i class="bi bi-person"></i>
+                    <span th:text="${todo.owner.firstName + ' ' + todo.owner.lastName}"></span>
+                </span>
             </div>
-            <div class="col-auto">
-                <input type="submit" class="btn btn-outline-primary" value="Add">
+        </div>
+
+        <div class="task-section">
+            <div class="section-header">
+                <h3 class="section-title">
+                    <i class="bi bi-list-task"></i> Tasks
+                </h3>
+                <a th:href="@{|/tasks/create/todos/${todo.id}|}" class="btn btn-create-task">
+                    <i class="bi bi-plus-circle"></i> New Task
+                </a>
             </div>
 
-        </form>
+            <div th:if="${tasks.empty}" class="empty-tasks">
+                <i class="bi bi-info-circle"></i> No tasks in this list yet
+            </div>
+
+            <div th:unless="${tasks.empty}" class="task-list">
+                <div th:each="task : ${tasks}" class="task-card">
+                    <div class="task-main">
+                        <span class="task-name" th:text="${task.name}"></span>
+                        <span class="task-priority"
+                              th:classappend="${'priority-' + task.priority.name().toLowerCase()}"
+                              th:text="${task.priority.name().substring(0, 1) + task.priority.name().substring(1).toLowerCase()}">
+                        </span>
+                    </div>
+                    <div class="task-secondary">
+                        <span class="task-state"
+                              th:classappend="${'state-' + task.state.name.toLowerCase()}"
+                              th:text="${task.state.name}">
+                        </span>
+                        <div class="task-actions">
+                            <a th:href="@{|/tasks/${task.id}/update/todos/${todo.id}|}" class="btn-action btn-edit">
+                                <i class="bi bi-pencil"></i> Edit
+                            </a>
+                            <a th:href="@{|/tasks/${task.id}/delete/todos/${todo.id}|}" class="btn-action btn-delete">
+                                <i class="bi bi-trash"></i> Delete
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="collaborators-section">
+            <h3 class="section-title">
+                <i class="bi bi-people"></i> Collaborators
+            </h3>
+
+            <div th:if="${todo.collaborators.empty}" class="empty-collaborators">
+                <i class="bi bi-info-circle"></i> No collaborators yet
+            </div>
+
+            <div th:unless="${todo.collaborators.empty}" class="collaborators-list">
+                <div th:each="collaborator : ${todo.collaborators}" class="collaborator-card">
+                    <a th:href="@{|/users/${collaborator.id}/read|}" class="collaborator-link">
+                        <i class="bi bi-person"></i>
+                        <span th:text="${collaborator.firstName + ' ' + collaborator.lastName}"></span>
+                    </a>
+                    <div sec:authorize="hasAuthority('ADMIN') or (hasAuthority('USER') and principal.details.id == todo.owner.id)">
+                        <a th:href="@{/todos/{id}/remove(id = ${todo.id}, user_id = ${collaborator.id})}"
+                           class="btn-remove">
+                            <i class="bi bi-x"></i> Remove
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div sec:authorize="hasAuthority('ADMIN') or (hasAuthority('USER') and principal.details.id == todo.owner.id)"
+                 class="add-collaborator">
+                <form th:action="@{/todos/{id}/add(id = ${todo.id})}" method="get" class="collaborator-form">
+                    <div class="form-group">
+                        <label for="users">
+                            <i class="bi bi-person-plus"></i> Add Collaborator
+                        </label>
+                        <div class="input-group">
+                            <select name="user_id" id="users" class="form-select" required>
+                                <option value="" selected disabled>Select user...</option>
+                                <option th:each="user : ${users}" th:value="${user.id}"
+                                        th:text="${user.firstName + ' ' + user.lastName}"></option>
+                            </select>
+                            <button type="submit" class="btn btn-add">
+                                <i class="bi bi-plus"></i> Add
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="back-link">
+            <a th:href="@{|/todos/all/users/${todo.owner.id}|}" class="btn btn-back">
+                <i class="bi bi-arrow-left"></i> Back to Lists
+            </a>
+        </div>
     </div>
-
-    <br>
-    <span class="mt-4" th:if="${#authorization.expression('hasAuthority(''ADMIN'')')
-                or #authorization.expression('hasAuthority(''USER'')') and #authentication.details.id == todo.owner.id}">
-            <a th:href="@{|/todos/all/users/${todo.owner.id}|}">Go to To-Do List</a>
-        </span>
 </div>
 </body>
 </html>
