@@ -5,47 +5,54 @@
       lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Info about User</title>
+    <title>User Profile</title>
+    <link rel="stylesheet" href="/img/css/draft_style.css">
 </head>
 <body>
-<div layout:fragment="content" style="margin: 0 auto; width: max-content">
-    <h2>Info about User</h2>
-    <table class="table">
-        <tr>
-            <td>Id: </td>
-            <td>
-                <b th:text="${user.id}"></b>
-            </td>
-        </tr>
-        <tr>
-            <td>First name:</td>
-            <td>
-                <b th:text="${user.firstName}"></b>
-            </td>
-        </tr>
-        <tr>
-            <td>Last name</td>
-            <td>
-                <b th:text="${user.lastName}"></b>
-            </td>
-        </tr>
-        <tr>
-            <td>E-mail:</td>
-            <td>
-                <b th:text="${user.email}"></b>
-            </td>
-        </tr>
-        <tr>
-            <td>Role: </td>
-            <td>
-                <b th:text="${user.role.name}"></b>
-            </td>
-        </tr>
-    </table>
-    <div th:if="${#authorization.expression('hasAuthority(''ADMIN'')')
-                    or #authorization.expression('hasAuthority(''USER'')') and #authentication.details.id == user.id}">
-        <a th:href="@{|/users/${user.id}/update|}">Edit</a> |
-        <a th:href="@{|/users/${user.id}/delete|}">Remove</a>
+<div layout:fragment="content">
+    <div class="user-profile-container">
+        <div class="user-profile-header">
+            <h2 class="user-profile-title">
+                <i class="bi bi-person-circle"></i> User Profile
+            </h2>
+            <div class="user-avatar">
+                <i class="bi bi-person-fill" style="font-size: 4rem; color: var(--forest-green);"></i>
+            </div>
+        </div>
+
+        <div class="user-info-card">
+            <div class="user-info-item">
+                <span class="user-info-label"><i class="bi bi-person"></i> ID:</span>
+                <span class="user-info-value" th:text="${user.id}"></span>
+            </div>
+            <div class="user-info-item">
+                <span class="user-info-label"><i class="bi bi-card-text"></i> First Name:</span>
+                <span class="user-info-value" th:text="${user.firstName}"></span>
+            </div>
+            <div class="user-info-item">
+                <span class="user-info-label"><i class="bi bi-card-text"></i> Last Name:</span>
+                <span class="user-info-value" th:text="${user.lastName}"></span>
+            </div>
+            <div class="user-info-item">
+                <span class="user-info-label"><i class="bi bi-envelope"></i> Email:</span>
+                <span class="user-info-value" th:text="${user.email}"></span>
+            </div>
+            <div class="user-info-item">
+                <span class="user-info-label"><i class="bi bi-shield"></i> Role:</span>
+                <span class="user-info-value" th:text="${user.role.name}"></span>
+            </div>
+        </div>
+
+        <div class="user-actions"
+             th:if="${#authorization.expression('hasAuthority(''ADMIN'')')
+                     or (#authorization.expression('hasAuthority(''USER'')') and #authentication.details.id == user.id)}">
+            <a th:href="@{|/users/${user.id}/update|}" class="btn btn-edit">
+                <i class="bi bi-pencil"></i> Edit Profile
+            </a>
+            <a th:href="@{|/users/${user.id}/delete|}" class="btn btn-delete">
+                <i class="bi bi-trash"></i> Delete Account
+            </a>
+        </div>
     </div>
 </div>
 </body>
