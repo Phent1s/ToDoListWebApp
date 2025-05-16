@@ -15,7 +15,7 @@
             <h2 class="update-title">
                 <i class="bi bi-pencil-square"></i> Update To-Do
             </h2>
-            <a th:href="@{|/todos/all/users/${todo.owner.id}|}" class="btn btn-back">
+            <a th:href="@{|/todos/all/users/${#authentication.details.id}|}" class="btn btn-back">
                 <i class="bi bi-arrow-left"></i> Back to List
             </a>
         </div>
