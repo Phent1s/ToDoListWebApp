@@ -5,42 +5,57 @@
       lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Create new Task</title>
+    <title th:text="${'New Task - ' + todo.title}">Create New Task</title>
+    <link rel="stylesheet" href="/img/css/draft_style.css">
 </head>
 <body>
-<div layout:fragment="content" style="margin: 0 auto; width: max-content">
-    <h2>Create new Task</h2>
-    <form th:action="@{|/tasks/create/todos/${todo.id}|}" th:object="${task}" method="post">
+<div layout:fragment="content">
+    <div class="create-form-container">
+        <div class="form-header">
+            <h2 class="form-title">
+                <i class="bi bi-plus-circle"></i> Add New Task
+                <small class="text-muted" th:text="'to ' + ${todo.title}"></small>
+            </h2>
+            <a th:href="@{|/todos/${todo.id}/read|}" class="btn btn-back">
+                <i class="bi bi-arrow-left"></i> Back to List
+            </a>
+        </div>
 
-        <input type="hidden" name="todoId" th:value="${todo.id}">
+        <form th:action="@{|/tasks/create/todos/${todo.id}|}" th:object="${task}" method="post" class="create-form">
+            <input type="hidden" name="todoId" th:value="${todo.id}">
 
-        <div class="mb-3">
-            <label for="name" class="form-label">Name</label>
-            <input type="text" class="form-control" th:field="*{name}" id="name">
-            <div class="invalid-feedback d-block">
-                <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+            <div class="form-group">
+                <label for="name" class="form-label">
+                    <i class="bi bi-card-text"></i> Task Name
+                </label>
+                <input type="text" class="form-control" th:field="*{name}" id="name"
+                       placeholder="Enter task description" required>
+                <div class="error-message" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
             </div>
-        </div>
 
-        <div class="mb-3">
-            <label for="priority" class="form-label">Priority</label>
-            <select name="priority" id="priority" class="form-select">
-                <option th:each="priority : ${priorities}" th:value="${priority}" th:text="${priority.name()
-                            .substring(0, 1) + priority.name().substring(1).toLowerCase()}"/>
-            </select>
-            <div class="invalid-feedback d-block">
-                <span th:if="${#fields.hasErrors('priority')}" th:errors="*{priority}"></span>
+            <div class="form-group">
+                <label for="priority" class="form-label">
+                    <i class="bi bi-exclamation-triangle"></i> Priority
+                </label>
+                <select class="form-select" th:field="*{priority}" id="priority" required>
+                    <option th:each="priority : ${priorities}"
+                            th:value="${priority}"
+                            th:text="${priority.name().substring(0, 1) + priority.name().substring(1).toLowerCase()}">
+                    </option>
+                </select>
+                <div class="error-message" th:if="${#fields.hasErrors('priority')}" th:errors="*{priority}"></div>
             </div>
-        </div>
 
-        <div class="mb-3">
-            <input type="reset" class="btn btn-outline-secondary" value="Clear"/>
-            <input type="submit" class="btn btn-primary" value="Create"/>
-        </div>
-
-    </form>
-    <br>
-    <a th:href="@{|/todos/${todo.id}/read|}">Go to Task List</a>
+            <div class="form-actions">
+                <button type="reset" class="btn btn-reset">
+                    <i class="bi bi-arrow-counterclockwise"></i> Clear
+                </button>
+                <button type="submit" class="btn btn-create">
+                    <i class="bi bi-check-circle"></i> Add Task
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 </body>
 </html>
