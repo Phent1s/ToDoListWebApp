@@ -4,20 +4,30 @@
       lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Home</title>
-    <link rel="stylesheet" href="/img/css/draft_style.css">
+    <title>Home - The Best ToDo App</title>
 </head>
 <body>
-<div layout:fragment="content" style="margin: 0 auto; width: max-content">
-    <div class="mt-5 text-center">
-        <h1>The Ultimate ToDo App</h1>
-        <h4 style="color: darkgray">Finally, you can sort out your daily tasks.</h4>
-    </div>
+<div layout:fragment="content">
+    <section class="hero-section">
+        <div class="container">
+            <h1 class="hero-title display-4">Organize Your Work & Life</h1>
+            <p class="hero-subtitle lead">The simplest way to stay productive and manage your tasks</p>
 
-    <div class="mt-5">
-        <img src="/img/todo.png" alt="hero" />
-    </div>
+            <div class="mt-5">
+                <img src="/img/todo.png" alt="Todo App Illustration" class="hero-image">
+            </div>
 
+            <div class="mt-5">
+                <a th:href="@{/login}" class="btn btn-success btn-lg px-4 me-2" sec:authorize="!isAuthenticated()">
+                    <i class="bi bi-box-arrow-in-right"></i> Get Started
+                </a>
+                <a th:href="@{|/todos/all/users/${#authentication.details.id}|}"
+                   class="btn btn-outline-success btn-lg px-4" sec:authorize="isAuthenticated()">
+                    <i class="bi bi-list-check"></i> My Tasks
+                </a>
+            </div>
+        </div>
+    </section>
 </div>
 </body>
 </html>

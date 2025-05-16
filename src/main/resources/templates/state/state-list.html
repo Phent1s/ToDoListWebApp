@@ -5,39 +5,60 @@
       lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>States List</title>
+    <title>Task States</title>
+    <link rel="stylesheet" href="/img/css/draft_style.css">
 </head>
 <body>
-<div layout:fragment="content" style="margin: 0 auto; width: max-content">
+<div layout:fragment="content">
+    <div class="states-container">
+        <div class="states-header">
+            <h1 class="states-title">
+                <i class="bi bi-columns"></i> Task States
+            </h1>
+            <a th:href="@{/states/create}" class="btn btn-create-state">
+                <i class="bi bi-plus-circle"></i> New State
+            </a>
+        </div>
 
-    <h1>States List</h1>
-    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
-    <form th:action="@{/states/create}" method="get">
-        <input type="submit" class="btn btn-primary" value="Create new State">
-    </form>
-    <br>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>No.</th>
-            <th>Name</th>
-            <th colspan="2">Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="state, iStat: ${states}">
-            <td th:text="${iStat.index + 1}"/>
-            <td th:text="${state.name}"/>
-            <td>
-                <a th:href="@{|/states/${state.id}/rename|}">Rename</a>
-            </td>
-            <td>
-                <a th:href="@{|/states/${state.id}/delete|}">Delete</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+        <div th:if="${error}" class="alert alert-danger" role="alert">
+            <i class="bi bi-exclamation-triangle"></i>
+            <span th:text="${error}"></span>
+        </div>
+
+        <div class="table-responsive">
+            <table class="states-table">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th><i class="bi bi-tag"></i> State Name</th>
+                    <th colspan="2"><i class="bi bi-gear"></i> Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="state, iStat : ${states}">
+                    <td th:text="${iStat.index + 1}"></td>
+                    <td>
+                        <span class="state-badge" th:text="${state.name}"></span>
+                    </td>
+                    <td>
+                        <a th:href="@{|/states/${state.id}/rename|}" class="btn-action btn-rename">
+                            <i class="bi bi-pencil"></i> Rename
+                        </a>
+                    </td>
+                    <td>
+                        <a th:href="@{|/states/${state.id}/delete|}" class="btn-action btn-delete">
+                            <i class="bi bi-trash"></i> Delete
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div th:if="${states.empty}" class="empty-states">
+            <i class="bi bi-info-circle"></i> No states defined yet
+        </div>
+    </div>
 </div>
-
 </body>
 </html>

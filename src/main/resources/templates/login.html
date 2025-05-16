@@ -8,30 +8,52 @@
     <title>Log-In</title>
 </head>
 <body>
-<div layout:fragment="content" style="margin: 0 auto; width: max-content">
+<div layout:fragment="content">
+    <div class="login-container">
+        <h2 class="login-title">
+            <i class="bi bi-door-open"></i> Welcome Back
+        </h2>
 
-    <p th:if="${param.logout}" class="alert alert-success mt-4">Successfully logged out</p>
+        <p th:if="${param.logout}" class="alert alert-success">
+            <i class="bi bi-check-circle"></i> Successfully logged out
+        </p>
 
-    <h2>Log in</h2>
-    <p th:if="${param.error}" class="alert alert-danger">Username or password is not correct!</p>
+        <p th:if="${param.error}" class="alert alert-danger">
+            <i class="bi bi-exclamation-triangle"></i> Username or password is not correct!
+        </p>
 
-    <form th:action="@{/login}" method="POST">
-        <div class="mb-3">
-            <label for="username" class="form-label">Username</label>
-            <input type="text" class="form-control" name="username" id="username" size="24">
-        </div>
-        <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" name="password" id="password" size="24"/>
-        </div>
-        <div class="mb-3">
-            <input type="submit" value="Login" class="btn btn-primary" />
-        </div>
-    </form>
-    <p>Don't have an account?
-        <a th:href="@{/users/create}">Register now!</a>
-    </p>
+        <form th:action="@{/login}" method="POST">
+            <div class="mb-3">
+                <label for="username" class="form-label">
+                    <i class="bi bi-person"></i> Username
+                </label>
+                <input type="text" class="form-control" name="username" id="username"
+                       placeholder="Enter your username" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">
+                    <i class="bi bi-lock"></i> Password
+                </label>
+                <input type="password" class="form-control" name="password" id="password"
+                       placeholder="Enter your password" required>
+            </div>
+
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-login">
+                    <i class="bi bi-box-arrow-in-right"></i> Login
+                </button>
+            </div>
+
+            <div class="mt-3 text-center">
+                <p>Don't have an account?
+                    <a th:href="@{/users/create}" class="register-link">
+                        Register now!
+                    </a>
+                </p>
+            </div>
+        </form>
+    </div>
 </div>
-<p>userdata</p>
 </body>
 </html>

@@ -1,32 +1,93 @@
 <nav xmlns:th="http://www.thymeleaf.org"
      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-     class="navbar navbar-expand-lg bg-primary navbar-dark" >
+     class="navbar navbar-expand-lg navbar-custom navbar-dark sticky-top">
     <div class="container-fluid">
-        <a class="navbar-brand" th:href="@{/}">Home</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarText">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item" sec:authorize="isAuthenticated()">
-                    <a class="nav-link" th:href="@{|/todos/all/users/${#authentication.details.id}|}">My To-Dos</a>
-                </li>
-                <li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
-                    <a class="nav-link" th:href="@{/users/all}">List of Users</a>
-                </li>
-                <li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
-                    <a class="nav-link" th:href="@{/states/all}">Manage States</a>
-                </li>
-            </ul>
-            <span class="navbar-text" sec:authorize="isAuthenticated()">
-                Hello <a th:href="@{|/users/${#authentication.details.id}/read|}"
-                         th:text="${#authentication.details.firstName}"></a>!
-            </span>
+        <!-- Левый блок (лого + основное меню) -->
+        <div class="d-flex align-items-center">
+            <!-- Логотип -->
+            <a class="navbar-brand fw-bold me-2" th:href="@{/}">
+                <img src="/img/favicon-32x32.png" alt="Logo" width="30" height="30" class="d-inline-block align-top me-2">
+                ToDo App
+            </a>
+
+            <!-- Основное меню (для всех авторизованных) -->
+            <div class="dropdown" sec:authorize="isAuthenticated()">
+                <button class="btn btn-outline-light dropdown-toggle" type="button" id="mainDropdown" data-bs-toggle="dropdown">
+                    <i class="bi bi-list-task"></i> My Tasks
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a class="dropdown-item" th:href="@{|/todos/all/users/${#authentication.details.id}|}">
+                            <i class="bi bi-card-checklist me-2"></i>All Tasks
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" th:href="@{/tasks/today}">
+                            <i class="bi bi-sun me-2"></i>Today's Tasks
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" th:href="@{/tasks/important}">
+                            <i class="bi bi-star me-2"></i>Important
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" th:href="@{/tasks/completed}">
+                            <i class="bi bi-check-circle me-2"></i>Completed
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <a class="nav-link" th:href="@{/login}" sec:authorize="!isAuthenticated()">Login</a>
-        <form th:action="@{/logout}" method="post" style="display: inline-block" sec:authorize="isAuthenticated()">
-            <input type="submit" class="btn text-white" value="Log out">
-        </form>
+
+        <!-- Правый блок (админ-панель + пользовательские элементы) -->
+        <div class="d-flex align-items-center">
+            <!-- Админ-панель (только для админов) -->
+            <div class="dropdown me-3" sec:authorize="hasAuthority('ADMIN')">
+                <button class="btn btn-outline-warning dropdown-toggle" type="button" id="adminDropdown" data-bs-toggle="dropdown">
+                    <i class="bi bi-shield-lock"></i> Admin
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                        <a class="dropdown-item" th:href="@{/users/all}">
+                            <i class="bi bi-people me-2"></i>User Management
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" th:href="@{/states/all}">
+                            <i class="bi bi-columns me-2"></i>Task States
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" th:href="@{/admin/stats}">
+                            <i class="bi bi-graph-up me-2"></i>Statistics
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" th:href="@{/admin/backup}">
+                            <i class="bi bi-database me-2"></i>Backup
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Приветствие и кнопки -->
+            <span class="navbar-text me-3" sec:authorize="isAuthenticated()">
+                <i class="bi bi-person-circle me-1"></i>
+                <a th:href="@{|/users/${#authentication.details.id}/read|}"
+                   th:text="${#authentication.details.firstName}"
+                   class="fw-bold text-decoration-none"></a>
+            </span>
+
+            <a class="btn btn-outline-light me-2" th:href="@{/login}" sec:authorize="!isAuthenticated()">
+                <i class="bi bi-box-arrow-in-right"></i> Login
+            </a>
+
+            <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()">
+                <button type="submit" class="btn btn-logout">
+                    <i class="bi bi-box-arrow-right"></i> Logout
+                </button>
+            </form>
+        </div>
     </div>
 </nav>
