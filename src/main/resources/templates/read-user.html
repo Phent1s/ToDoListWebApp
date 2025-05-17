@@ -27,7 +27,6 @@
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th><i class="bi bi-hash"></i> ID</th>
                     <th><i class="bi bi-text-left"></i> Title</th>
                     <th><i class="bi bi-calendar"></i> Created</th>
                     <th><i class="bi bi-person"></i> Owner</th>
@@ -37,7 +36,6 @@
                 <tbody>
                 <tr th:each="todo, iStat : ${todos}">
                     <td th:text="${iStat.index + 1}"></td>
-                    <td th:text="${todo.id}"></td>
                     <td>
                         <a th:href="@{|/todos/${todo.id}/read|}" class="todo-link" th:text="${todo.title}"></a>
                     </td>

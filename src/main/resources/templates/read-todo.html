@@ -166,24 +166,5 @@
     </div>
 </div>
 
-<!-- Скрипт для работы фильтров задач -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Инициализация тултипов
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl);
-        });
-
-        // Обработка фильтров задач
-        document.querySelectorAll('.task-filters .btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelector('.task-filters .btn.active').classList.remove('active');
-                this.classList.add('active');
-                // Здесь будет логика фильтрации
-            });
-        });
-    });
-</script>
 </body>
 </html>
