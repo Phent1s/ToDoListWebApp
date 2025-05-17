@@ -20,21 +20,21 @@ public class StateController {
 
     private final StateService stateService;
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/all")
     public String listStates(Model model) {
         model.addAttribute("states", stateService.findAll());
         return "state/state-list";
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/create")
     public String createState(Model model) {
         model.addAttribute("state", new State());
         return "state/create-state";
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/create")
     public String createState(@Validated @ModelAttribute("state") State state, BindingResult result) {
         if (result.hasErrors()) {
@@ -44,7 +44,7 @@ public class StateController {
         return "redirect:/states/all";
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/{id}/rename")
     public String renameState(@PathVariable Long id, Model model) {
         State state = stateService.readById(id);
@@ -52,7 +52,7 @@ public class StateController {
         return "state/rename-state";
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/{id}/rename")
     public String renameState(@Validated @ModelAttribute("state") State renamedState, BindingResult result) {
         if (result.hasErrors()) {
@@ -63,7 +63,7 @@ public class StateController {
         return "redirect:/states/all";
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/{id}/delete")
     public String deleteState(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {

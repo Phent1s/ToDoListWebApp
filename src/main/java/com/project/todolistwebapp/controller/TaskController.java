@@ -27,9 +27,9 @@ public class TaskController {
     private final StateService stateService;
     private final TaskTransformer taskTransformer;
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN') " +
-                  "and (@toDoSecurityService.isOwner(#todoId, authentication.principal.id) " +
-                  "or @toDoSecurityService.isCollaborator(#todoId, authentication.principal.id))")
+    @PreAuthorize("hasAuthority('ADMIN') " +
+                  "or (@toDoSecurityService.isOwner(#todoId, @userService.getCurrentUser().id) " +
+                  "or @toDoSecurityService.isCollaborator(#todoId, @userService.getCurrentUser().id))")
     @GetMapping("/create/todos/{todo_id}")
     public String create(@PathVariable("todo_id") Long todoId, Model model) {
         model.addAttribute("task", new TaskDto());
@@ -38,9 +38,9 @@ public class TaskController {
         return "create-task";
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')" +
-                  "and (@toDoSecurityService.isOwner(#todoId, authentication.principal.id))" +
-                  "or @toDoSecurityService.isCollaborator(#todoId, authentication.principal.id)")
+    @PreAuthorize("hasAuthority('ADMIN')" +
+                  "or (@toDoSecurityService.isOwner(#todoId, @userService.getCurrentUser().id))" +
+                  "or @toDoSecurityService.isCollaborator(#todoId, @userService.getCurrentUser().id)")
     @PostMapping("/create/todos/{todo_id}")
     public String create(@PathVariable("todo_id") Long todoId, Model model,
                          @Validated @ModelAttribute("task") TaskDto taskDto, BindingResult result){
@@ -56,9 +56,9 @@ public class TaskController {
         return "redirect:/todos/" + todoId + "/read";
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN') " +
-                  "and (@toDoSecurityService.isOwner(#todoId, authentication.principal.id))" +
-                  "or @toDoSecurityService.isCollaborator(#todoId, authentication.principal.id)")
+    @PreAuthorize("hasAuthority('ADMIN') " +
+                  "or (@toDoSecurityService.isOwner(#todoId, @userService.getCurrentUser().id))" +
+                  "or @toDoSecurityService.isCollaborator(#todoId, @userService.getCurrentUser().id)")
     @GetMapping("/{task_id}/update/todos/{todo_id}")
     public String taskUpdateForm(@PathVariable("task_id") Long taskId, @PathVariable("todo_id") Long todoId, Model model) {
         TaskDto taskDto = taskTransformer.convertToDto(taskService.readById(taskId));
@@ -68,9 +68,9 @@ public class TaskController {
         return "update-task";
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')" +
-                  "and (@toDoSecurityService.isOwner(#todoId, authentication.principal.id))" +
-                  "or @toDoSecurityService.isCollaborator(#todoId, authentication.principal.id)")
+    @PreAuthorize("hasAuthority('ADMIN')" +
+                  "or (@toDoSecurityService.isOwner(#todoId, @userService.getCurrentUser().id))" +
+                  "or @toDoSecurityService.isCollaborator(#todoId, @userService.getCurrentUser().id)")
     @PostMapping("/{task_id}/update/todos/{todo_id}")
     public String update(@PathVariable("todo_id") Long todoId, @PathVariable("task_id") Long taskId, Model model,
                          @Validated @ModelAttribute("task") TaskDto taskDto, BindingResult result) {
@@ -90,9 +90,9 @@ public class TaskController {
         return "redirect:/todos/" + todoId + "/read";
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')" +
-                  "and (@toDoSecurityService.isOwner(#todoId, authentication.principal.id))" +
-                  "or @toDoSecurityService.isCollaborator(#todoId, authentication.principal.id)")
+    @PreAuthorize("hasAuthority('ADMIN')" +
+                  "or (@toDoSecurityService.isOwner(#todoId, @userService.getCurrentUser().id))" +
+                  "or @toDoSecurityService.isCollaborator(#todoId, @userService.getCurrentUser().id)")
     @GetMapping("/{task_id}/delete/todos/{todo_id}")
     public String delete(@PathVariable("task_id") Long taskId, @PathVariable("todo_id") Long todoId){
         taskService.delete(taskId);

@@ -28,14 +28,12 @@ public class UserController {
     private final UserService userService;
     private final UserDtoConverter userDtoConverter;
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/create")
     public String create(Model model) {
         model.addAttribute("user", new CreateUserDto());
         return "create-user";
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
     public String create(@Validated @ModelAttribute("user") CreateUserDto userDto, BindingResult result) {
         if (result.hasErrors()) {
@@ -51,8 +49,7 @@ public class UserController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN') " +
-                  "or #id == authentication.principal.id")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @GetMapping("{id}/read")
     public String read(@PathVariable Long id, Model model) {
         User user = userService.readById(id);
@@ -60,8 +57,8 @@ public class UserController {
         return "user-info";
     }
 
-    @PreAuthorize("hasRole('ADMIN') " +
-                  "or #id == authentication.principal.id")
+    @PreAuthorize("hasAuthority('ADMIN') " +
+                  "or @userService.getCurrentUser().id == #id")
     @GetMapping("/{id}/update")
     public String update(@PathVariable Long id, Model model) {
         User user = userService.readById(id);
@@ -70,8 +67,8 @@ public class UserController {
         return "update-user";
     }
 
-    @PreAuthorize("hasRole('ADMIN') " +
-                  "or #id == authentication.principal.id")
+    @PreAuthorize("hasAuthority('ADMIN') " +
+                  "or @userService.getCurrentUser().id == #id")
     @PostMapping("/{id}/update")
     public String update(@PathVariable Long id, Model model,
                          @Validated @ModelAttribute("user") UpdateUserDto updateUserDto, BindingResult result) {
@@ -97,8 +94,8 @@ public class UserController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN') " +
-                  "or #id == authentication.principal.id")
+    @PreAuthorize("hasAuthority('ADMIN') " +
+                  "or @userService.getCurrentUser().id == #id")
     @GetMapping("/{id}/delete")
     public String delete(@PathVariable Long id, HttpServletRequest request, HttpServletResponse response) {
         User currentUser = userService.getCurrentUser();
@@ -111,7 +108,7 @@ public class UserController {
         return "redirect:/users/all";
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/all")
     public String getAll(Model model) {
         model.addAttribute("users", userService.getAll());
