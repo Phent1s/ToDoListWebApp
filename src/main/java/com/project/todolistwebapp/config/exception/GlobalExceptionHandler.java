@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @ControllerAdvice
 @Slf4j
@@ -16,19 +17,37 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NullEntityReferenceException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ModelAndView nullEntityReferenceExceptionHandler(HttpServletRequest request, NullEntityReferenceException ex) {
-        return getModelAndView(request, HttpStatus.BAD_REQUEST, ex);
+        log.error("Null Entity ex: {} :: URL = {}", ex.getMessage(), request.getRequestURI(), ex);
+        ModelAndView modelAndView = new ModelAndView("error/bad-request");
+        modelAndView.addObject("code", HttpStatus.BAD_REQUEST.value() + " / " + HttpStatus.BAD_REQUEST.getReasonPhrase());
+        modelAndView.addObject("message", ex.getMessage());
+        return modelAndView;
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(value = HttpStatus.FORBIDDEN)
     public ModelAndView accessForbiddenExceptionHandler(HttpServletRequest request, AccessDeniedException ex) {
-        return getModelAndView(request, HttpStatus.FORBIDDEN, ex);
+        log.error("Access Denied: {} :: URL = {}", ex.getMessage(), request.getRequestURI(), ex);
+        ModelAndView modelAndView = new ModelAndView("error/access-denied");
+        modelAndView.addObject("code", HttpStatus.FORBIDDEN.value() + " / " + HttpStatus.FORBIDDEN.getReasonPhrase());
+        modelAndView.addObject("message", ex.getMessage());
+        return modelAndView;
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public ModelAndView entityNotFoundExceptionHandler(HttpServletRequest request, EntityNotFoundException ex) {
         return getModelAndView(request, HttpStatus.NOT_FOUND, ex);
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    public ModelAndView noResourceFoundExceptionHandler(HttpServletRequest request, NoResourceFoundException ex) {
+        log.error("Resource not found: {} :: URL = {}", ex.getMessage(), request.getRequestURI(), ex);
+        ModelAndView modelAndView = new ModelAndView("error/not-found");
+        modelAndView.addObject("code", HttpStatus.NOT_FOUND.value() + " / " + HttpStatus.NOT_FOUND.getReasonPhrase());
+        modelAndView.addObject("message", ex.getMessage());
+        return modelAndView;
     }
 
     @ExceptionHandler(Exception.class)
@@ -39,7 +58,7 @@ public class GlobalExceptionHandler {
 
     private ModelAndView getModelAndView(HttpServletRequest request, HttpStatus httpStatus, Exception exception) {
         log.error("Exception raised = {} :: URL = {}", exception.getMessage(), request.getRequestURI(), exception);
-        ModelAndView modelAndView = new ModelAndView("error");
+        ModelAndView modelAndView = new ModelAndView("error/error");
         modelAndView.addObject("code", httpStatus.value() + " / " + httpStatus.getReasonPhrase());
         modelAndView.addObject("message", exception.getMessage());
         return modelAndView;
