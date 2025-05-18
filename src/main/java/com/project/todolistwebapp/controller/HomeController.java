@@ -1,28 +1,17 @@
 package com.project.todolistwebapp.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Controller
 public class HomeController {
-    private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
     @GetMapping("/")
     public String home() {
-        logger.info("Home page was loaded!");
+        log.info("Home page was loaded!");
         return "home";
-    }
-
-    @GetMapping("/access-denied")
-    public String accessDenied() {
-        return "access-denied";
-    }
-
-    @PostMapping("/access-denied")
-    public String accessDeniedPost() {
-        return "access-denied";
     }
 }

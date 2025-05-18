@@ -1,6 +1,5 @@
 package com.project.todolistwebapp.controller;
 
-import com.project.todolistwebapp.dto.StateDto;
 import com.project.todolistwebapp.model.State;
 import com.project.todolistwebapp.service.StateService;
 import lombok.RequiredArgsConstructor;

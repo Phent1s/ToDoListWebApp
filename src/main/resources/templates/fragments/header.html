@@ -2,15 +2,12 @@
      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
      class="navbar navbar-expand-lg navbar-custom navbar-dark sticky-top">
     <div class="container-fluid">
-        <!-- Левый блок (лого + основное меню) -->
         <div class="d-flex align-items-center">
-            <!-- Логотип -->
             <a class="navbar-brand fw-bold me-2" th:href="@{/}">
                 <img src="/img/favicon-32x32.png" alt="Logo" width="30" height="30" class="d-inline-block align-top me-2">
                 ToDo App
             </a>
 
-            <!-- Основное меню (для всех авторизованных) -->
             <div class="dropdown" sec:authorize="isAuthenticated()">
                 <button class="btn btn-outline-light dropdown-toggle" type="button" id="mainDropdown" data-bs-toggle="dropdown">
                     <i class="bi bi-list-task"></i> My Tasks
@@ -40,9 +37,7 @@
             </div>
         </div>
 
-        <!-- Правый блок (админ-панель + пользовательские элементы) -->
         <div class="d-flex align-items-center">
-            <!-- Админ-панель (только для админов) -->
             <div class="dropdown me-3" sec:authorize="hasAuthority('ADMIN')">
                 <button class="btn btn-outline-warning dropdown-toggle" type="button" id="adminDropdown" data-bs-toggle="dropdown">
                     <i class="bi bi-shield-lock"></i> Admin
@@ -71,7 +66,6 @@
                 </ul>
             </div>
 
-            <!-- Приветствие и кнопки -->
             <span class="navbar-text me-3" sec:authorize="isAuthenticated()">
                 <i class="bi bi-person-circle me-1"></i>
                 <a th:href="@{|/users/${#authentication.details.id}/read|}"

@@ -7,9 +7,7 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.User.UserBuilder;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -37,13 +35,11 @@ public class User implements UserDetails {
     private String lastName;
 
     @Email
-//    @Pattern(regexp = "[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}",
-//    message = "Must be a valid e-mail address")
+
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-//    @Pattern(regexp = "(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,}",
-//            message = "Must be minimum 6 characters, at least one letter and one number")
+
     @Setter(AccessLevel.PRIVATE)
     @Column(name = "password", nullable = false)
     private String password;

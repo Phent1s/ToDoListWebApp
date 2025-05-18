@@ -56,7 +56,7 @@ public class ToDo {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ToDo toDo = (ToDo) o;
-        return id == toDo.id && Objects.equals(title, toDo.title) && Objects.equals(createdAt, toDo.createdAt) && Objects.equals(owner, toDo.owner) && Objects.equals(tasks, toDo.tasks) && Objects.equals(collaborators, toDo.collaborators);
+        return Objects.equals(id, toDo.id) && Objects.equals(title, toDo.title) && Objects.equals(createdAt, toDo.createdAt) && Objects.equals(owner, toDo.owner) && Objects.equals(tasks, toDo.tasks) && Objects.equals(collaborators, toDo.collaborators);
     }
 
     @Override

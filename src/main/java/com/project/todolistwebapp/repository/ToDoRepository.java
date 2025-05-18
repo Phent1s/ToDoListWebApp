@@ -10,11 +10,6 @@ import java.util.List;
 @Repository
 public interface ToDoRepository extends JpaRepository<ToDo, Long> {
 
-//    @Query(value = "select id, title, created_at, owner_id from todos where owner_id = ?1 union " +
-//                   "select id, title, created_at, owner_id from todos inner join todo_collaborator on id = todo_id and " +
-//                   "collaborator_id = ?1", nativeQuery = true)
-//    List<To Do> getByUserId(Long userId);
-
     @Query(value = """
     SELECT t.id, t.title, t.created_at, t.owner_id 
     FROM todos t

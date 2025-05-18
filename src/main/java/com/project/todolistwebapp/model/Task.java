@@ -37,7 +37,7 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return id == task.id && Objects.equals(name, task.name) && priority == task.priority && Objects.equals(todo, task.todo) && Objects.equals(state, task.state);
+        return Objects.equals(id, task.id) && Objects.equals(name, task.name) && priority == task.priority && Objects.equals(todo, task.todo) && Objects.equals(state, task.state);
     }
 
     @Override
