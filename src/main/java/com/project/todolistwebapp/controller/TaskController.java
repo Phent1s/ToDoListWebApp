@@ -35,6 +35,7 @@ public class TaskController {
         model.addAttribute("task", new TaskDto());
         model.addAttribute("todo", toDoService.readById(todoId));
         model.addAttribute("priorities", TaskPriority.values());
+        log.info("Create task page loaded");
         return "create-task";
     }
 
@@ -47,12 +48,13 @@ public class TaskController {
         if (result.hasErrors()) {
             model.addAttribute("todo", toDoService.readById(todoId));
             model.addAttribute("priorities", TaskPriority.values());
+            log.warn("Create task validation errors: {}", result.getAllErrors());
             return "create-task";
         }
 
         taskService.create(taskDto);
         log.info("Task with id = {} was created successfully", taskDto.getId());
-
+        log.info("New task details: {}", taskDto);
         return "redirect:/todos/" + todoId + "/read";
     }
 
@@ -65,6 +67,7 @@ public class TaskController {
         model.addAttribute("task", taskDto);
         model.addAttribute("priorities", TaskPriority.values());
         model.addAttribute("states", stateService.getAll());
+        log.info("Task update form were loaded");
         return "update-task";
     }
 
@@ -77,6 +80,7 @@ public class TaskController {
         if (result.hasErrors()) {
             model.addAttribute("priorities", TaskPriority.values());
             model.addAttribute("states", stateService.getAll());
+            log.warn("Update task validation errors: {}", result.getAllErrors());
             return "update-task";
         }
         Task task = taskTransformer.fillEntityFields(
@@ -87,6 +91,7 @@ public class TaskController {
         );
         taskService.update(task);
         log.info("Task with id = {} was updated successfully", taskId);
+        log.info("Updated task details: {}", taskDto);
         return "redirect:/todos/" + todoId + "/read";
     }
 
