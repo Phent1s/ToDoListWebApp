@@ -3,6 +3,7 @@ package com.project.todolistwebapp.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -12,10 +13,8 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "todos")
-@Getter
-@Setter
+@Getter @Setter @NoArgsConstructor @ToString
 public class ToDo {
-    @ToString.Include
     @Id
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "todos_id_seq")
@@ -25,7 +24,6 @@ public class ToDo {
     @Column(name = "title", nullable = false, unique = true)
     private String title;
 
-    @ToString.Include
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
@@ -33,15 +31,15 @@ public class ToDo {
     private User owner;
 
     @OneToMany(mappedBy = "todo", cascade = CascadeType.REMOVE)
+    @ToString.Exclude
     private List<Task> tasks;
 
     @ManyToMany
     @JoinTable(name = "todo_collaborator",
             joinColumns = @JoinColumn(name = "todo_id"),
             inverseJoinColumns = @JoinColumn(name = "collaborator_id"))
+    @ToString.Exclude
     private List<User> collaborators;
-
-    public ToDo() {}
 
     public @NotBlank(message = "The 'title' cannot be empty") String getTitle() {
         return title;
@@ -62,14 +60,5 @@ public class ToDo {
     @Override
     public int hashCode() {
         return Objects.hash(id, title, createdAt, owner, tasks, collaborators);
-    }
-
-    @Override
-    public String toString() {
-        return "ToDo{" +
-               "id=" + id +
-               ", title='" + title + '\'' +
-               ", createdAt=" + createdAt +
-               '}';
     }
 }
