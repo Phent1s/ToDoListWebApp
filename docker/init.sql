@@ -1,4 +1,43 @@
 
+CREATE TABLE IF NOT EXISTS users (
+    id BIGINT NOT NULL PRIMARY KEY,
+    first_name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(255)
+);
+
+CREATE TABLE IF NOT EXISTS states(
+    id BIGINT NOT NULL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS todos(
+    id BIGINT NOT NULL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NOT NULL,
+    owner_id BIGINT,
+    FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS tasks(
+    id BIGINT NOT NULL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    priority VARCHAR(255),
+    todo_id BIGINT,
+    state_id BIGINT,
+    FOREIGN KEY (todo_id) REFERENCES todos(id) ON DELETE CASCADE,
+    FOREIGN KEY (state_id) REFERENCES states(id)
+);
+
+CREATE TABLE IF NOT EXISTS todo_collaborator(
+    todo_id BIGINT NOT NULL,
+    collaborator_id BIGINT NOT NULL,
+    FOREIGN KEY (todo_id) REFERENCES todos(id),
+    FOREIGN KEY (collaborator_id) REFERENCES users(id)
+);
+
 INSERT INTO users (id, first_name, last_name, email, password, role) VALUES (1, 'Alex', 'Fisher', 'alex@mail.com', '$2a$12$n7JxG2mB4x2QFv5oDu.X1.T8dUxqCHmIyZ6vsRgyS/eFvjlT44VwS', 'ADMIN');
 INSERT INTO users (id, first_name, last_name, email, password, role) VALUES (2, 'Bill', 'Black', 'bill@mail.com', '$2a$12$M8ejDjJliggKWUodFncD9.sZyMrhC7PpsmaYXb5i7iPamZ6/eytGa', 'ADMIN');
 INSERT INTO users (id, first_name, last_name, email, password, role) VALUES (3, 'Harley', 'Almond', 'harley@mail.com', '$2a$12$hBxKD42i90mKap1S3oa.D.eLE3RNWwW5ieXrEV3C8X22ANCmGBJte', 'USER');
@@ -28,6 +67,23 @@ INSERT INTO todo_collaborator (todo_id, collaborator_id) VALUES (4, 3);
 INSERT INTO todo_collaborator (todo_id, collaborator_id) VALUES (4, 1);
 INSERT INTO todo_collaborator (todo_id, collaborator_id) VALUES (5, 2);
 INSERT INTO todo_collaborator (todo_id, collaborator_id) VALUES (5, 1);
+
+create sequence state_id_seq
+    increment by 50;
+alter sequence state_id_seq owner to admin;
+
+create sequence users_id_seq;
+alter sequence users_id_seq owner to admin;
+alter sequence users_id_seq owned by users.id;
+
+create sequence tasks_id_seq;
+alter sequence tasks_id_seq owner to admin;
+alter sequence tasks_id_seq owned by tasks.id;
+
+create sequence todos_id_seq;
+alter sequence todos_id_seq owner to admin;
+alter sequence todos_id_seq owned by todos.id;
+
 
 SELECT setval('state_id_seq', (SELECT MAX(id) FROM states));
 SELECT setval('users_id_seq', (SELECT MAX(id) FROM users));
